@@ -69,7 +69,10 @@ resource "aws_iam_openid_connect_provider" "github" {
     [for org in local.github_organizations : "https://github.com/${org}"]
   ])
 
-  tags            = var.tags
-  thumbprint_list = [data.tls_certificate.github.certificates[0].sha1_fingerprint]
-  url             = "https://token.actions.githubusercontent.com"
+  tags = var.tags
+  url  = "https://token.actions.githubusercontent.com"
+  thumbprint_list = var.additional_thumbprints != null ? concat(
+    [data.tls_certificate.github.certificates[0].sha1_fingerprint],
+    [for thumbprint in var.additional_thumbprints : thumbprint]
+  ) : [data.tls_certificate.github.certificates[0].sha1_fingerprint]
 }

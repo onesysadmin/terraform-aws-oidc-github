@@ -28,7 +28,7 @@ provider "aws" {
 
 module "oidc_github" {
   source  = "unfunco/oidc-github/aws"
-  version = "1.2.0"
+  version = "1.3.1"
 
   github_repositories = [
     "org/repo",
@@ -53,7 +53,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
       - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v1
+        uses: aws-actions/configure-aws-credentials@v2
         with:
           aws-region: ${{ secrets.AWS_REGION }}
           role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/github
@@ -80,6 +80,7 @@ jobs:
 
 | Name                          | Description                                                                 | Type           | Default    | Required |
 | ----------------------------- | --------------------------------------------------------------------------- | -------------- | ---------- | :------: |
+| additional_thumbprints        | List of additional thumbprints for the OIDC provider.                       | `list(string)` | `null`     |    no    |
 | attach_admin_policy           | Flag to enable/disable the attachment of the AdministratorAccess policy.    | `bool`         | `false`    |    no    |
 | attach_read_only_policy       | Flag to enable/disable the attachment of the ReadOnly policy.               | `bool`         | `true`     |    no    |
 | create_oidc_provider          | Flag to enable/disable the creation of the GitHub OIDC provider.            | `bool`         | `true`     |    no    |
