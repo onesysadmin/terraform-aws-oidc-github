@@ -3,6 +3,14 @@
 Notable changes to this project are documented in this changelog.  
 This project adheres to the [semantic versioning] specification.
 
+## [1.5.0] – 2023-06-04
+
+- Add support for organisations using GitHub Enterprise Cloud ([c1d6cc13](https://github.com/unfunco/terraform-aws-oidc-github/commit/c1d6cc13cfd7668784dec11e96f23061b346eae0))
+
+## [1.4.0] – 2023-06-01
+
+- Update the AWS provider version constraint to allow v5 ([4f6b152](https://github.com/unfunco/terraform-aws-oidc-github/commit/4f6b152447a4caff21204d3e00417ca96b8de154))
+
 ## [1.3.1] – 2023-03-27
 
 - Ensure the additional_thumbprints variable allows null values ([750f0f6](https://github.com/unfunco/terraform-aws-oidc-github/commit/750f0f6b0296057ff9910cebd2ac2f577b0cdb90))
@@ -106,4 +114,6 @@ This project adheres to the [semantic versioning] specification.
 [1.2.1]: https://github.com/unfunco/terraform-aws-oidc-github/compare/v1.2.0...v1.2.1
 [1.3.0]: https://github.com/unfunco/terraform-aws-oidc-github/compare/v1.2.1...v1.3.0
 [1.3.1]: https://github.com/unfunco/terraform-aws-oidc-github/compare/v1.3.0...v1.3.1
+[1.4.0]: https://github.com/unfunco/terraform-aws-oidc-github/compare/v1.3.1...v1.4.0
+[1.5.0]: https://github.com/unfunco/terraform-aws-oidc-github/compare/v1.4.0...v1.5.0
 [semantic versioning]: https://semver.org
