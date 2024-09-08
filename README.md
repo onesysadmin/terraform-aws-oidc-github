@@ -7,12 +7,14 @@
 
 Terraform module to configure GitHub Actions as an IAM OIDC identity provider in
 AWS. OpenID Connect allows GitHub Actions workflows to access resources in AWS
-without requiring the AWS credentials as to be stored long-lived GitHub secrets.
+without requiring AWS credentials to be stored as long-lived GitHub secrets.
 
 ## 🔨 Getting started
 
 ### Requirements
 
+- [AWS Provider] 4.0+
+- [TLS Provider] 3.0+
 - [Terraform] 1.0+
 
 ### Installation and usage
@@ -22,13 +24,9 @@ The following snippet shows the minimum required configuration to create a
 working OIDC connection between GitHub Actions and AWS.
 
 ```terraform
-provider "aws" {
-  region = var.region
-}
-
 module "oidc_github" {
   source  = "unfunco/oidc-github/aws"
-  version = "1.5.1"
+  version = "1.8.0"
 
   github_repositories = [
     "org/repo",
@@ -51,10 +49,8 @@ jobs:
       id-token: write
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
     - name: Configure AWS credentials
-      uses: aws-actions/configure-aws-credentials@v2
+      uses: aws-actions/configure-aws-credentials@v4
       with:
         aws-region: ${{ env.AWS_REGION }}
         role-to-assume: arn:aws:iam::${{ env.AWS_ACCOUNT_ID }}:role/github
@@ -88,7 +84,8 @@ applied, the JWT will contain an updated `iss` claim.
 
 | Name                          | Description                                                                 | Type           | Default    | Required |
 | ----------------------------- | --------------------------------------------------------------------------- | -------------- | ---------- | :------: |
-| additional_thumbprints        | List of additional thumbprints for the OIDC provider.                       | `list(string)` | `null`     |    no    |
+| additional_audiences          | List of additional OIDC audiences allowed to assume the role.               | `list(string)` | `null`     |    no    |
+| additional_thumbprints        | List of additional thumbprints for the OIDC provider.                       | `list(string)` | `[]`       |    no    |
 | attach_admin_policy           | Flag to enable/disable the attachment of the AdministratorAccess policy.    | `bool`         | `false`    |    no    |
 | attach_read_only_policy       | Flag to enable/disable the attachment of the ReadOnly policy.               | `bool`         | `true`     |    no    |
 | create_oidc_provider          | Flag to enable/disable the creation of the GitHub OIDC provider.            | `bool`         | `true`     |    no    |
@@ -106,9 +103,11 @@ applied, the JWT will contain an updated `iss` claim.
 
 ## Outputs
 
-| Name         | Description          |
-| ------------ | -------------------- |
-| iam_role_arn | ARN of the IAM role. |
+| Name              | Description               |
+| ----------------- | ------------------------- |
+| iam_role_arn      | ARN of the IAM role.      |
+| iam_role_name     | Name of the IAM role.     |
+| oidc_provider_arn | ARN of the OIDC provider. |
 
 <!-- END_TF_DOCS -->
 
@@ -117,6 +116,7 @@ applied, the JWT will contain an updated `iss` claim.
 - [Configuring OpenID Connect in Amazon Web Services]
 - [Creating OpenID Connect (OIDC) identity providers]
 - [Obtaining the thumbprint for an OpenID Connect Identity Provider]
+- [GitHub Actions – Update on OIDC integration with AWS]
 
 ## License
 
@@ -124,9 +124,12 @@ applied, the JWT will contain an updated `iss` claim.
 Made available under the terms of the [Apache License 2.0].
 
 [apache license 2.0]: LICENSE.md
+[aws provider]: https://registry.terraform.io/providers/hashicorp/aws/latest/docs
 [complete example]: examples/complete
 [configuring openid connect in amazon web services]: https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/configuring-openid-connect-in-amazon-web-services
 [creating openid connect (oidc) identity providers]: https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_providers_create_oidc.html
 [make]: https://www.gnu.org/software/make/
 [obtaining the thumbprint for an openid connect identity provider]: https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_providers_create_oidc_verify-thumbprint.html
 [terraform]: https://www.terraform.io
+[tls provider]: https://registry.terraform.io/providers/hashicorp/tls/latest/docs
+[github actions – update on oidc integration with aws]: https://github.blog/changelog/2023-06-27-github-actions-update-on-oidc-integration-with-aws/
